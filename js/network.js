@@ -111,7 +111,7 @@ Network = function() {
       return d.id;
     });
 
-    node = nodesGroup.selectAll("circle.node").data(nodesData, function(d) {
+    text = nodesGroup.selectAll("text.node").data(nodesData, function(d) {
       return d.id;
     });
 
@@ -126,6 +126,15 @@ Network = function() {
     }).style("stroke", function(d) {
       return strokeFor(d);
     }).style("stroke-width", 2.0);
+
+
+   node.enter().append("text").attr("class", "node").attr("x", function(d) {
+      return d.x;
+    }).attr("y", function(d) {
+      return d.y;
+    }).text(function(d) {
+      return d.name;
+    }).style("fill", "white");
 
     // node.on("mouseover", showDetails).on("mouseout", hideDetails);
 
