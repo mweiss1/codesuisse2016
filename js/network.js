@@ -84,7 +84,7 @@ Network = function() {
   hoverLink = function(d) {
 
     var l = d3.select("#link-" + d.id).attr("stroke", "red").attr("stroke-opacity", 1);
-    
+    $("#infobox").html("Edge id: " + d.id + "<br>" + "Source: " + d.source.name + "<br>" + "Target: " + d.target.name);
   };
 
   restoreLink = function(d) {
