@@ -110,7 +110,7 @@ Network = function() {
       return nodeColors(d.name);
     }).style("stroke", function(d) {
       return strokeFor(d);
-    }).style("stroke-width", 1.0);
+    }).style("stroke-width", 2.0);
 
     // node.on("mouseover", showDetails).on("mouseout", hideDetails);
 
@@ -121,7 +121,7 @@ Network = function() {
     link = linksG.selectAll("line.link").data(curLinksData, function(d) {
       return d.source.id + "_" + d.target.id;
     });
-    link.enter().append("line").attr("class", "link").attr("stroke", "#ddd").attr("stroke-opacity", 0.8).attr("x1", function(d) {
+    link.enter().append("line").attr("class", "link").attr("stroke", "#ddd").attr("stroke-opacity", 0.4).attr("x1", function(d) {
       return d.source.x;
     }).attr("y1", function(d) {
       return d.source.y;
@@ -153,7 +153,7 @@ Network = function() {
   };
 
   strokeFor = function(d) {
-    return d3.rgb(nodeColors(d.name)).darker().toString();
+    return "white";  
   };
 
   return network;
