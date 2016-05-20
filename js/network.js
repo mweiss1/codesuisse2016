@@ -1,16 +1,16 @@
-var Network, activate;
+var Network;
 
 Network = function() {
 
-  var allData, charge, curLinksData, curNodesData, force, forceTick, height, layout, link, linksG, neighboring, network, node, nodeColors, nodesG, setupData, strokeFor, update, updateCenters, updateLinks, updateNodes, width;
+  var allData, charge, linksData, nodesData, force, forceTick, height, layout, link, linksGroup, neighboring, network, node, nodeColors, nodesGroup, setUpGraph, strokeFor, update, updateCenters, updateLinks, updateNodes, width;
 
   width = 1060;
   height = 850;
   allData = [];
-  curLinksData = jsonData.links;
-  curNodesData = jsonData.nodes;
-  nodesG = null;
-  linksG = null;
+  linksData = jsonData.links;
+  nodesData = jsonData.nodes;
+  nodesGroup = null;
+  linksGroup = null;
   node = null;
   link = null;
   layout = "force";
@@ -24,11 +24,11 @@ Network = function() {
   network = function(selection, data) {
 
     var vis;
-    allData = setupData(data);
+    allData = setUpGraph(data);
 
     vis = d3.select(selection).append("svg").attr("width", width).attr("height", height);
-    linksG = vis.append("g").attr("id", "links");
-    nodesG = vis.append("g").attr("id", "nodes");
+    linksGroup = vis.append("g").attr("id", "links");
+    nodesGroup = vis.append("g").attr("id", "nodes");
     force.size([width, height]);
 
     force.on("tick", forceTick).charge(-550).linkDistance(200);
@@ -38,32 +38,31 @@ Network = function() {
 
   update = function() {
     var artists;
+    var numConnections = [];
+
+    for(var i = 0; i < 41; i++) {
+      numConnections[i] = 0;
+    }
 
     force.nodes(allData.nodes);
     updateNodes();
 
-    if (layout === "force") {
-      force.links(allData.links);
-      updateLinks();
-    } else {
-      force.links([]);
-      if (link) {
-        link.data([]).exit().remove();
-        link = null;
-      }
-    }
+    force.links(allData.links);
+    updateLinks();
+
+    link.forEach(function(l) {
+
+      
+    });
+
+    node.forEach(function(n) {
+
+    });
 
     return force.start();
   };
 
-  network.updateData = function(newData) {
-    allData = setupData(newData);
-    link.remove();
-    node.remove();
-    return update();
-  };
-
-  setupData = function(data) {
+  setUpGraph = function(data) {
 
     var scaleCircleRadius, countExtent, nodesMap;
 
@@ -96,7 +95,7 @@ Network = function() {
 
   updateNodes = function() {
 
-    node = nodesG.selectAll("circle.node").data(curNodesData, function(d) {
+    node = nodesGroup.selectAll("circle.node").data(nodesData, function(d) {
       return d.id;
     });
 
@@ -118,10 +117,11 @@ Network = function() {
   };
 
   updateLinks = function() {
-    link = linksG.selectAll("line.link").data(curLinksData, function(d) {
+    link = linksGroup.selectAll("line.link").data(linksData, function(d) {
       return d.source.id + "_" + d.target.id;
     });
-    link.enter().append("line").attr("class", "link").attr("stroke", "#ddd").attr("stroke-opacity", 0.4).attr("x1", function(d) {
+    link.enter().append("line").attr("class", "link").attr("stroke", "#ddd").attr("stroke-opacity", 0.4)
+      .attr("x1", function(d) {
       return d.source.x;
     }).attr("y1", function(d) {
       return d.source.y;
@@ -159,7 +159,6 @@ Network = function() {
   return network;
 };
 
-  var myNetwork;
-  myNetwork = Network();
+var bankNetwork = Network();
 
-  myNetwork("#vis", jsonData);
+bankNetwork("#vis", jsonData);
