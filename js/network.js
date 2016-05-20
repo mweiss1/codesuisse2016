@@ -31,7 +31,13 @@ Network = function() {
     nodesGroup = vis.append("g").attr("id", "nodes");
     force.size([width, height]);
 
-    force.on("tick", forceTick).charge(-550).linkDistance(200);
+    force.on("tick", forceTick).charge(-550).linkDistance(function(l){
+      if(numConnections[l.target] > 4 && numConnections[l.source] > 4){
+        return 200;
+      } else {
+        return 175;
+      }
+    });
 
     return update();
   };
@@ -51,13 +57,16 @@ Network = function() {
     updateLinks();
 
     link.forEach(function(l) {
-
-      
+      numConnections[l.target]+=1;
     });
 
-    node.forEach(function(n) {
-
-    });
+    /*node.forEach(function(n) {
+      if(numConnections[n.id] > 4){
+        n.isHub = true;
+      }else{
+        n.isHub = false;
+      }
+    });*/
 
     return force.start();
   };
