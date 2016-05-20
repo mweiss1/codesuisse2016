@@ -46,7 +46,6 @@ Network = function() {
 
   update = function() {
     var artists;
-    
 
     for(var i = 0; i < 41; i++) {
       numConnections[i] = 0;
@@ -84,7 +83,12 @@ Network = function() {
   hoverLink = function(d) {
 
     var l = d3.select("#link-" + d.id).attr("stroke", "red").attr("stroke-opacity", 1);
-    $("#infobox").html("Edge id: " + d.id + "<br>" + "Source: " + d.source.name + "<br>" + "Target: " + d.target.name);
+    var instrumentId, qty;
+    instrumentIdo = $.grep(data_edge_positions, function(el) {
+      return el.edgeId == d.id && el.qty > 0; 
+    });
+    console.log("i id: " + instrumentIdo);
+    $("#infobox").html("Edge id: " + d.id + "<br>" + "Source: " + d.source.name + "<br>" + "Target: " + d.target.name + "<br> Instrument: " + instrumentIdo[0].instrumentId + "<br> Quantity: " + instrumentIdo[0].qty);
   };
 
   restoreLink = function(d) {
