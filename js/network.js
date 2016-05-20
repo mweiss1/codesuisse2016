@@ -107,7 +107,7 @@ Network = function() {
     }).attr("r", function(d) {
       return d.radius;
     }).style("fill", function(d) {
-      return nodeColors(d.artist);
+      return nodeColors(d.name);
     }).style("stroke", function(d) {
       return strokeFor(d);
     }).style("stroke-width", 1.0);
