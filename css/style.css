@@ -7,6 +7,11 @@ a, a:visited {
   color: #4d4d4d;
   text-decoration: underline;
 }
+text.text {
+  font-size: 15px;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
 
 #container {
   width: 940px;

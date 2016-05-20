@@ -2,7 +2,7 @@ var Network;
 
 Network = function() {
 
-  var allData, charge, linksData, nodesData, force, forceTick, height, layout, link, linksGroup, neighboring, network, node, nodeColors, nodesGroup, setUpGraph, strokeFor, update, updateCenters, updateLinks, updateNodes, width;
+  var allData, charge, linksData, nodesData, force, forceTick, height, layout, link, linksGroup, neighboring, network, node, nodeColors, nodesGroup, setUpGraph, strokeFor, update, updateCenters, updateLinks, updateNodes, width, text;
 
   width = 1060;
   height = 850;
@@ -63,15 +63,32 @@ Network = function() {
     });
     console.log(numConnections[3]);
 
-    /*node.forEach(function(n) {
-      if(numConnections[n.id] > 4){
-        n.isHub = true;
-      }else{
-        n.isHub = false;
-      }
-    });*/
+    force.start();
 
-    return force.start();
+    text = nodesGroup.selectAll("text.text").data(nodesData, function(d) {
+      return d.id;
+    });
+
+    text.enter().append("text").attr("class", "text").attr("x", function(d) {
+      return d.x;
+    }).attr("y", function(d) {
+      return d.y;
+    }).text(function(d) {
+      return d.name;
+    }).style("fill", "white");
+
+    link.on("mouseover", hoverLink).on("mouseout", restoreLink);
+
+  };
+
+  hoverLink = function(d) {
+
+    var l = d3.select("#link-" + d.id).attr("stroke", "red").attr("stroke-opacity", 1);
+    
+  };
+
+  restoreLink = function(d) {
+    var l = d3.select("#link-" + d.id).attr("stroke", "#ddd").attr("stroke-opacity", .4);
   };
 
   setUpGraph = function(data) {
@@ -111,10 +128,6 @@ Network = function() {
       return d.id;
     });
 
-    text = nodesGroup.selectAll("text.node").data(nodesData, function(d) {
-      return d.id;
-    });
-
     node.enter().append("circle").attr("class", "node").attr("cx", function(d) {
       return d.x;
     }).attr("cy", function(d) {
@@ -127,16 +140,7 @@ Network = function() {
       return strokeFor(d);
     }).style("stroke-width", 2.0);
 
-
-   node.enter().append("text").attr("class", "node").attr("x", function(d) {
-      return d.x;
-    }).attr("y", function(d) {
-      return d.y;
-    }).text(function(d) {
-      return d.name;
-    }).style("fill", "white");
-
-    // node.on("mouseover", showDetails).on("mouseout", hideDetails);
+    // node.on("mouseover").on("mouseout");
 
     return node.exit().remove();
   };
@@ -154,7 +158,10 @@ Network = function() {
       return d.target.x;
     }).attr("y2", function(d) {
       return d.target.y;
+    }).attr("id", function(d) {
+      return "link-" + d.id;
     });
+
     return link.exit().remove();
   };
 
@@ -166,7 +173,7 @@ Network = function() {
       return d.y;
     });
 
-    return link.attr("x1", function(d) {
+    link.attr("x1", function(d) {
       return d.source.x;
     }).attr("y1", function(d) {
       return d.source.y;
@@ -174,6 +181,12 @@ Network = function() {
       return d.target.x;
     }).attr("y2", function(d) {
       return d.target.y;
+    });
+
+    text.attr("x", function(d) {
+      return d.x;
+    }).attr("y", function(d) {
+      return d.y;
     });
   };
 
