@@ -16,6 +16,7 @@ Network = function() {
   layout = "force";
   force = d3.layout.force();
   nodeColors = d3.scale.category20();
+  var numConnections = [];
 
   charge = function(node) {
     return -Math.pow(node.radius, 2.0) / 2;
@@ -30,12 +31,13 @@ Network = function() {
     linksGroup = vis.append("g").attr("id", "links");
     nodesGroup = vis.append("g").attr("id", "nodes");
     force.size([width, height]);
-
+    update();
     force.on("tick", forceTick).charge(-550).linkDistance(function(l){
-      if(numConnections[l.target] > 4 && numConnections[l.source] > 4){
-        return 200;
+      if(numConnections[l.target.id] > 4 && numConnections[l.source.id] > 4){
+        return 375;
       } else {
-        return 175;
+        //console.log(numConnections[l.target.id]);
+        return 125;
       }
     });
 
@@ -44,7 +46,7 @@ Network = function() {
 
   update = function() {
     var artists;
-    var numConnections = [];
+    
 
     for(var i = 0; i < 41; i++) {
       numConnections[i] = 0;
@@ -56,9 +58,10 @@ Network = function() {
     force.links(allData.links);
     updateLinks();
 
-    link.forEach(function(l) {
-      numConnections[l.target]+=1;
+    allData.links.forEach(function(l) {
+      numConnections[l.target.id]+=1;
     });
+    console.log(numConnections[3]);
 
     /*node.forEach(function(n) {
       if(numConnections[n.id] > 4){
@@ -103,6 +106,10 @@ Network = function() {
   };
 
   updateNodes = function() {
+
+    node = nodesGroup.selectAll("circle.node").data(nodesData, function(d) {
+      return d.id;
+    });
 
     node = nodesGroup.selectAll("circle.node").data(nodesData, function(d) {
       return d.id;
